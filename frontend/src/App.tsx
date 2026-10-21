@@ -1,6 +1,11 @@
+
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./components/AppLayout";
 import { PlaceholderPage } from "./components/PlaceholderPage";
+
+// Applications Management — Issue #7
+// Applications Management — Issue #7
+import Applications from "./APPLICATION/Applications";
 
 export default function App() {
   return (
@@ -17,16 +22,13 @@ export default function App() {
             />
           }
         />
+
+        {/* Applications Management — Issue #7 */}
         <Route
           path="/applications"
-          element={
-            <PlaceholderPage
-              eyebrow="Your job search"
-              title="Applications"
-              description="Your saved applications will be available here."
-            />
-          }
+          element={<Applications />}
         />
+
         <Route
           path="/keyword-matcher"
           element={
