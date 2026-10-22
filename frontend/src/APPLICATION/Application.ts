@@ -66,3 +66,30 @@ export async function deleteApplication(id: number): Promise<void> {
     throw new Error("Failed to delete application.");
   }
 }
+
+export interface DashboardStats {
+  total_applications: number;
+  status_counts: {
+    Saved: number;
+    Applied: number;
+    Interview: number;
+    Offer: number;
+    Rejected: number;
+  };
+  upcoming_deadlines: number;
+  overdue_applications: number;
+  total_interviews: number;
+  total_offers: number;
+}
+
+export async function getDashboardStats(): Promise<DashboardStats> {
+  const response = await fetch(`${API_BASE_URL}/api/dashboard`);
+
+  if (!response.ok) {
+    throw new Error("Failed to load dashboard statistics.");
+  }
+
+  const result = await response.json();
+
+  return result.data ?? result;
+}
