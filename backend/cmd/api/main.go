@@ -38,6 +38,7 @@ func main() {
 
 	mux.Handle("/api/jobs", jobHandler)
 	mux.Handle("/api/jobs/", jobHandler)
+	mux.Handle("/api/dashboard", jobHandler)
 
 	corsOrigins := os.Getenv("JOBTRACK_CORS_ORIGINS")
 	if corsOrigins == "" {
