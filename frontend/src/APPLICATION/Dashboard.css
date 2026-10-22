@@ -1,0 +1,147 @@
+.dashboard-page {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.dashboard-header h1 {
+  margin-bottom: 8px;
+}
+
+.dashboard-description {
+  color: var(--color-muted);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.stat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stat-label {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.stat-value {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--color-ink);
+  line-height: 1.2;
+}
+
+.stat-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-indicator--upcoming {
+  background: #fff7e6;
+  color: #9a6d12;
+  border: 1px solid #f5e3c4;
+}
+
+.stat-indicator--overdue {
+  background: #fdecea;
+  color: #a63232;
+  border: 1px solid #f0caca;
+}
+
+.stat-card--overdue .stat-value {
+  color: #a63232;
+}
+
+.stat-card--upcoming .stat-value {
+  color: #9a6d12;
+}
+
+.status-breakdown {
+  border-top: 1px solid var(--color-border);
+  padding-top: 24px;
+}
+
+.status-breakdown h2 {
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+}
+
+.status-item-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-name {
+  color: var(--color-ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.status-count {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+@media (max-width: 760px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

@@ -23,7 +23,19 @@ func NewHandler(repo *Repository) *Handler {
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	path := strings.Trim(strings.TrimPrefix(r.URL.Path, "/api/jobs"), "/")
+	path := r.URL.Path
+
+	if path == "/api/dashboard" {
+		if r.Method != http.MethodGet {
+			w.Header().Set("Allow", "GET")
+			httpapi.WriteMethodNotAllowed(w)
+			return
+		}
+		h.dashboard(w, r)
+		return
+	}
+
+	path = strings.Trim(strings.TrimPrefix(path, "/api/jobs"), "/")
 
 	if path == "" {
 		switch r.Method {
@@ -261,6 +273,20 @@ func (h *Handler) delete(w http.ResponseWriter, r *http.Request, id string) {
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+func (h *Handler) dashboard(w http.ResponseWriter, r *http.Request) {
+	jobs, err := h.Repo.List(r.Context())
+	if err != nil {
+		httpapi.WriteInternalError(w)
+		return
+	}
+
+	stats := ComputeDashboardStats(nowInLagos(), jobs)
+
+	httpapi.WriteJSON(w, http.StatusOK, map[string]any{
+		"data": stats,
+	})
 }
 
 func requireJSON(w http.ResponseWriter, r *http.Request) bool {
