@@ -1,7 +1,6 @@
 
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./components/AppLayout";
-import { PlaceholderPage } from "./components/PlaceholderPage";
 
 // Applications Management — Issue #7
 // Applications Management — Issue #7
