@@ -40,8 +40,8 @@ func main() {
 
 	mux.Handle("/api/jobs", jobHandler)
 	mux.Handle("/api/jobs/", jobHandler)
-        mux.Handle("/api/match", matchHandler)
-        mux.Handle("/api/dashboard", jobHandler)
+	mux.Handle("/api/match", matchHandler)
+	mux.Handle("/api/dashboard", jobHandler)
 
 	corsOrigins := os.Getenv("JOBTRACK_CORS_ORIGINS")
 	if corsOrigins == "" {
@@ -50,8 +50,6 @@ func main() {
 
 	allowedOrigins := strings.Split(corsOrigins, ",")
 	handler := httpapi.CORSMiddleware(mux, allowedOrigins)
-mux.Handle("/api/match", matchHandle
-mux.Handle("/api/dashboard", jobHandler)
 	addr := os.Getenv("JOBTRACK_ADDR")
 	if addr == "" {
 		addr = ":8080"
