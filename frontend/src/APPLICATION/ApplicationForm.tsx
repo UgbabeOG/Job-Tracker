@@ -42,6 +42,9 @@ export default function ApplicationForm({
   const [notes, setNotes] = useState(
     initialApplication?.notes ?? ""
   );
+  const [jobDescription, setJobDescription] = useState(
+    initialApplication?.job_description ?? ""
+  );
   const [error, setError] = useState("");
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -70,6 +73,7 @@ export default function ApplicationForm({
       deadline: deadline || null,
       status,
       notes: notes.trim() || null,
+      job_description: jobDescription.trim() || null,
     };
 
     try {
@@ -145,6 +149,17 @@ export default function ApplicationForm({
             <option value="Rejected">Rejected</option>
           </select>
         </div>
+      </div>
+
+      <div className="application-form-field">
+        <label htmlFor="job_description">Job Description</label>
+        <textarea
+          id="job_description"
+          value={jobDescription}
+          onChange={(event) => setJobDescription(event.target.value)}
+          placeholder="Paste the job description..."
+          rows={4}
+        />
       </div>
 
       <div className="application-form-field">

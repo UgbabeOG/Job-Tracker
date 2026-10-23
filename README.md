@@ -41,3 +41,10 @@ See [`frontend/README.md`](frontend/README.md) for setup details.
 | [`docs/requirements.md`](docs/requirements.md) | Product requirements (PRD) |
 | [`docs/api-contract.md`](docs/api-contract.md) | REST API contract |
 | [`docs/test-plan.md`](docs/test-plan.md) | Test plan |
+
+## Recent changes
+
+- Added a `job_description` field to job applications (backend model, database, API, and frontend form).
+- Keyword matching now uses `job_description` instead of notes or job title.
+- Keyword Matcher page shows scores for all saved jobs and allows matching an individual job.
+- Jobs without a description show a "No job description available" message.

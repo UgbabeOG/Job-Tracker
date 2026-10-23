@@ -42,6 +42,7 @@ func Open() (*sql.DB, error) {
 			status TEXT NOT NULL DEFAULT 'Saved'
 				CHECK (status IN ('Saved', 'Applied', 'Interview', 'Offer', 'Rejected')),
 			notes TEXT,
+			job_description TEXT,
 			created_at TEXT NOT NULL,
 			updated_at TEXT NOT NULL
 		)
@@ -49,6 +50,8 @@ func Open() (*sql.DB, error) {
 		db.Close()
 		return nil, fmt.Errorf("initialize jobs table: %w", err)
 	}
+
+	_, _ = db.Exec(`ALTER TABLE jobs ADD COLUMN job_description TEXT`)
 
 	return db, nil
 }
