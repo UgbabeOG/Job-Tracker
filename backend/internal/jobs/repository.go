@@ -20,7 +20,7 @@ func NewRepository(db *sql.DB) *Repository {
 func (r *Repository) List(ctx context.Context) ([]Job, error) {
 	rows, err := r.DB.QueryContext(ctx, `
 		SELECT id, company, job_title, job_url, date_applied,
-		       deadline, status, notes, created_at, updated_at
+		       deadline, status, notes, job_description, created_at, updated_at
 		FROM jobs ORDER BY created_at DESC
 	`)
 	if err != nil {
@@ -42,7 +42,7 @@ func (r *Repository) List(ctx context.Context) ([]Job, error) {
 func (r *Repository) Get(ctx context.Context, id string) (Job, error) {
 	job, err := scanJob(r.DB.QueryRowContext(ctx, `
 		SELECT id, company, job_title, job_url, date_applied,
-		       deadline, status, notes, created_at, updated_at
+		       deadline, status, notes, job_description, created_at, updated_at
 		FROM jobs WHERE id = ?
 	`, id))
 	if errors.Is(err, sql.ErrNoRows) {
@@ -63,10 +63,10 @@ func (r *Repository) Create(ctx context.Context, input CreateJobRequest) (Job, e
 	_, err := r.DB.ExecContext(ctx, `
 		INSERT INTO jobs (
 			id, company, job_title, job_url, date_applied,
-			deadline, status, notes, created_at, updated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			deadline, status, notes, job_description, created_at, updated_at
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`, id, input.Company, input.JobTitle, input.JobURL, input.DateApplied,
-		input.Deadline, status, input.Notes, now, now)
+		input.Deadline, status, input.Notes, input.JobDescription, now, now)
 	if err != nil {
 		return Job{}, err
 	}
@@ -78,10 +78,10 @@ func (r *Repository) Update(ctx context.Context, job Job) (Job, error) {
 	_, err := r.DB.ExecContext(ctx, `
 		UPDATE jobs SET
 			company = ?, job_title = ?, job_url = ?, date_applied = ?,
-			deadline = ?, status = ?, notes = ?, updated_at = ?
+			deadline = ?, status = ?, notes = ?, job_description = ?, updated_at = ?
 		WHERE id = ?
 	`, job.Company, job.JobTitle, job.JobURL, job.DateApplied,
-		job.Deadline, job.Status, job.Notes,
+		job.Deadline, job.Status, job.Notes, job.JobDescription,
 		time.Now().UTC().Format(time.RFC3339), job.ID)
 	if err != nil {
 		return Job{}, err
@@ -110,12 +110,12 @@ type rowScanner interface {
 
 func scanJob(row rowScanner) (Job, error) {
 	var job Job
-	var jobURL, dateApplied, deadline, notes sql.NullString
+	var jobURL, dateApplied, deadline, notes, jobDescription sql.NullString
 
 	err := row.Scan(
 		&job.ID, &job.Company, &job.JobTitle,
 		&jobURL, &dateApplied, &deadline,
-		&job.Status, &notes, &job.CreatedAt, &job.UpdatedAt,
+		&job.Status, &notes, &jobDescription, &job.CreatedAt, &job.UpdatedAt,
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -128,6 +128,7 @@ func scanJob(row rowScanner) (Job, error) {
 	job.DateApplied = nullStringPointer(dateApplied)
 	job.Deadline = nullStringPointer(deadline)
 	job.Notes = nullStringPointer(notes)
+	job.JobDescription = nullStringPointer(jobDescription)
 
 	return job, nil
 }

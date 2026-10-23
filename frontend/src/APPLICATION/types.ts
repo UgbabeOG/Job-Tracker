@@ -14,6 +14,7 @@ export interface Application {
   deadline: string | null;
   status: ApplicationStatus;
   notes: string | null;
+  job_description: string | null;
   created_at: string;
   updated_at: string;
 }

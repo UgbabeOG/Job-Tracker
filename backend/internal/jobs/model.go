@@ -21,26 +21,28 @@ var validStatuses = map[string]bool{
 }
 
 type Job struct {
-	ID          string  `json:"id"`
-	Company     string  `json:"company"`
-	JobTitle    string  `json:"job_title"`
-	JobURL      *string `json:"job_url"`
-	DateApplied *string `json:"date_applied"`
-	Deadline    *string `json:"deadline"`
-	Status      string  `json:"status"`
-	Notes       *string `json:"notes"`
-	CreatedAt   string  `json:"created_at"`
-	UpdatedAt   string  `json:"updated_at"`
+	ID             string  `json:"id"`
+	Company        string  `json:"company"`
+	JobTitle       string  `json:"job_title"`
+	JobURL         *string `json:"job_url"`
+	DateApplied    *string `json:"date_applied"`
+	Deadline       *string `json:"deadline"`
+	Status         string  `json:"status"`
+	Notes          *string `json:"notes"`
+	JobDescription *string `json:"job_description"`
+	CreatedAt      string  `json:"created_at"`
+	UpdatedAt      string  `json:"updated_at"`
 }
 
 type CreateJobRequest struct {
-	Company     string  `json:"company"`
-	JobTitle    string  `json:"job_title"`
-	JobURL      *string `json:"job_url"`
-	DateApplied *string `json:"date_applied"`
-	Deadline    *string `json:"deadline"`
-	Status      string  `json:"status"`
-	Notes       *string `json:"notes"`
+	Company        string  `json:"company"`
+	JobTitle       string  `json:"job_title"`
+	JobURL         *string `json:"job_url"`
+	DateApplied    *string `json:"date_applied"`
+	Deadline       *string `json:"deadline"`
+	Status         string  `json:"status"`
+	Notes          *string `json:"notes"`
+	JobDescription *string `json:"job_description"`
 }
 
 func ValidateJobInput(company, title, status string, jobURL, dateApplied, deadline *string) error {

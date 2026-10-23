@@ -10,6 +10,7 @@ import (
 	"jobtrack/internal/database"
 	"jobtrack/internal/httpapi"
 	"jobtrack/internal/jobs"
+	"jobtrack/internal/matching"
 )
 
 func main() {
@@ -21,6 +22,7 @@ func main() {
 
 	repo := jobs.NewRepository(db)
 	jobHandler := jobs.NewHandler(repo)
+	matchHandler := matching.NewHandler()
 
 	mux := http.NewServeMux()
 
@@ -38,6 +40,7 @@ func main() {
 
 	mux.Handle("/api/jobs", jobHandler)
 	mux.Handle("/api/jobs/", jobHandler)
+	mux.Handle("/api/match", matchHandler)
 	mux.Handle("/api/dashboard", jobHandler)
 
 	corsOrigins := os.Getenv("JOBTRACK_CORS_ORIGINS")
@@ -47,7 +50,6 @@ func main() {
 
 	allowedOrigins := strings.Split(corsOrigins, ",")
 	handler := httpapi.CORSMiddleware(mux, allowedOrigins)
-
 	addr := os.Getenv("JOBTRACK_ADDR")
 	if addr == "" {
 		addr = ":8080"
