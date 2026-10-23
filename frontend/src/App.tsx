@@ -7,6 +7,8 @@ import { PlaceholderPage } from "./components/PlaceholderPage";
 // Applications Management — Issue #7
 import Applications from "./APPLICATION/Applications";
 import Matcher from "./MATCHER/Matcher";
+// Dashboard — Issue #9
+import Dashboard from "./APPLICATION/Dashboard";
 
 export default function App() {
   return (
@@ -16,11 +18,7 @@ export default function App() {
         <Route
           path="/dashboard"
           element={
-            <PlaceholderPage
-              eyebrow="Overview"
-              title="Dashboard"
-              description="Your job-search overview will appear here once dashboard features are connected."
-            />
+            <Dashboard />
           }
         />
 

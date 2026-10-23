@@ -270,6 +270,63 @@ func TestRepositoryContextIsAvailable(t *testing.T) {
 	}
 }
 
+func TestDashboardEndpoint(t *testing.T) {
+	h := newTestHandler(t)
+
+	createTestJob(t, h)
+	request(t, h, http.MethodPost, "/api/jobs",
+		`{"company":"B","job_title":"Designer","status":"Applied","deadline":"2026-10-27"}`)
+
+	rec := request(t, h, http.MethodGet, "/api/dashboard", "")
+	if rec.Code != http.StatusOK {
+		t.Fatalf("dashboard status = %d, want %d; body: %s",
+			rec.Code, http.StatusOK, rec.Body.String())
+	}
+
+	var response struct {
+		Data struct {
+			TotalApplications   int            `json:"total_applications"`
+			StatusCounts        map[string]int `json:"status_counts"`
+			UpcomingDeadlines   int            `json:"upcoming_deadlines"`
+			OverdueApplications int            `json:"overdue_applications"`
+			TotalInterviews     int            `json:"total_interviews"`
+			TotalOffers         int            `json:"total_offers"`
+		} `json:"data"`
+	}
+	if err := json.Unmarshal(rec.Body.Bytes(), &response); err != nil {
+		t.Fatalf("decode dashboard: %v", err)
+	}
+
+	if response.Data.TotalApplications != 2 {
+		t.Errorf("total_applications = %d, want 2", response.Data.TotalApplications)
+	}
+	if response.Data.StatusCounts["Saved"] != 1 {
+		t.Errorf("Saved count = %d, want 1", response.Data.StatusCounts["Saved"])
+	}
+	if response.Data.StatusCounts["Applied"] != 1 {
+		t.Errorf("Applied count = %d, want 1", response.Data.StatusCounts["Applied"])
+	}
+	if response.Data.UpcomingDeadlines != 1 {
+		t.Errorf("upcoming_deadlines = %d, want 1", response.Data.UpcomingDeadlines)
+	}
+	if response.Data.TotalInterviews != 0 {
+		t.Errorf("total_interviews = %d, want 0", response.Data.TotalInterviews)
+	}
+}
+
+func TestDashboardDashboardMethodNotAllowed(t *testing.T) {
+	h := newTestHandler(t)
+
+	req := httptest.NewRequest(http.MethodPost, "/api/dashboard", strings.NewReader("{}"))
+	req.Header.Set("Content-Type", "application/json")
+	rec := httptest.NewRecorder()
+	h.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusMethodNotAllowed {
+		t.Errorf("dashboard POST status = %d, want %d", rec.Code, http.StatusMethodNotAllowed)
+	}
+}
+
 func TestValidateJobInputRejectsInvalidDateAndURL(t *testing.T) {
 	tests := []struct {
 		name        string
