@@ -7,10 +7,12 @@ import (
 	"strings"
 	"time"
 
+	"jobtrack/internal/assistant"
 	"jobtrack/internal/database"
 	"jobtrack/internal/httpapi"
 	"jobtrack/internal/jobs"
 	"jobtrack/internal/matching"
+	"jobtrack/internal/profile"
 )
 
 func main() {
@@ -23,6 +25,10 @@ func main() {
 	repo := jobs.NewRepository(db)
 	jobHandler := jobs.NewHandler(repo)
 	matchHandler := matching.NewHandler()
+	profRepo := profile.NewRepository(db)
+	profHandler := profile.NewHandler(profRepo)
+	assistRepo := assistant.NewRepository(db)
+	assistHandler := assistant.NewHandler(assistRepo, repo, profRepo)
 
 	mux := http.NewServeMux()
 
@@ -41,6 +47,9 @@ func main() {
 	mux.Handle("/api/jobs", jobHandler)
 	mux.Handle("/api/jobs/", jobHandler)
 	mux.Handle("/api/match", matchHandler)
+	mux.Handle("/api/profile", profHandler)
+	mux.Handle("/api/assistant", assistHandler)
+	mux.Handle("/api/assistant/", assistHandler)
 	mux.Handle("/api/dashboard", jobHandler)
 
 	corsOrigins := os.Getenv("JOBTRACK_CORS_ORIGINS")

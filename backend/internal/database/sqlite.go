@@ -53,5 +53,49 @@ func Open() (*sql.DB, error) {
 
 	_, _ = db.Exec(`ALTER TABLE jobs ADD COLUMN job_description TEXT`)
 
+	if _, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS profiles (
+			id TEXT PRIMARY KEY,
+			full_name TEXT,
+			email TEXT,
+			phone TEXT,
+			linkedin_url TEXT,
+			portfolio_url TEXT,
+			cv_text TEXT,
+			cv_path TEXT,
+			created_at TEXT NOT NULL,
+			updated_at TEXT NOT NULL
+		);
+
+		CREATE TABLE IF NOT EXISTS job_sources (
+			id TEXT PRIMARY KEY,
+			job_id TEXT,
+			source_url TEXT,
+			source_platform TEXT,
+			parsed_json TEXT,
+			created_at TEXT NOT NULL,
+			FOREIGN KEY(job_id) REFERENCES jobs(id) ON DELETE SET NULL
+		);
+
+		CREATE TABLE IF NOT EXISTS apply_suggestions (
+			id TEXT PRIMARY KEY,
+			job_id TEXT,
+			suggestions_json TEXT,
+			match_score INTEGER,
+			created_at TEXT NOT NULL,
+			FOREIGN KEY(job_id) REFERENCES jobs(id) ON DELETE CASCADE
+		);
+
+		CREATE TABLE IF NOT EXISTS assistant_audit (
+			id TEXT PRIMARY KEY,
+			action TEXT NOT NULL,
+			details TEXT,
+			created_at TEXT NOT NULL
+		);
+	`); err != nil {
+		db.Close()
+		return nil, fmt.Errorf("initialize assistant tables: %w", err)
+	}
+
 	return db, nil
 }

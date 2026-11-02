@@ -6,6 +6,8 @@ import { AppLayout } from "./components/AppLayout";
 // Applications Management — Issue #7
 import Applications from "./APPLICATION/Applications";
 import Matcher from "./MATCHER/Matcher";
+import ApplyAssistant from "./ASSISTANT/ApplyAssistant";
+import ProfilePage from "./PROFILE/ProfilePage";
 // Dashboard — Issue #9
 import Dashboard from "./APPLICATION/Dashboard";
 
@@ -30,6 +32,14 @@ export default function App() {
         <Route
           path="/keyword-matcher"
           element={<Matcher />}
+        />
+        <Route
+          path="/apply-assistant"
+          element={<ApplyAssistant />}
+        />
+        <Route
+          path="/profile"
+          element={<ProfilePage />}
         />
         <Route
           path="*"

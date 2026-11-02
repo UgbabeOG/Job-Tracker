@@ -4,6 +4,8 @@ const navigation = [
   { label: "Dashboard", to: "/dashboard" },
   { label: "Applications", to: "/applications" },
   { label: "Keyword Matcher", to: "/keyword-matcher" },
+  { label: "Apply Assistant", to: "/apply-assistant" },
+  { label: "Profile", to: "/profile" },
 ];
 
 export function AppLayout() {
